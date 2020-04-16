@@ -1,0 +1,57 @@
+{
+  "ret": 1,
+  "reason": "查询正常",
+  "total": 1,
+  "query_id": "35adf357d691ca578f3bf748e3280be6",
+  "data": [
+    {
+      "lat_name": "2018-08-30\r\n周四",
+      "data_list": [
+        {
+          "val": 372917,
+          "key": "a"
+        },
+        {
+          "val": 372917,
+          "key": "b"
+        },
+        {
+          "val": 372917,
+          "key": "c"
+        },
+        {
+          "val": 372917,
+          "key": "d"
+        }
+      ]
+    }
+  ],
+  "exec_time": 0,
+  "progress": 100,
+  "brd_paramter": {
+    "condition": {
+      "client_type": ["stb", "phone", "pad", "pc"],
+      "metric_id": "CNT_USER_ACTIVE",
+      "metric_lat_type": "date",
+      "time_granularity": "day",
+      "start_date": "2018-08-30",
+      "end_date": "2018-08-30",
+      "sp_id": ""
+    },
+    "platform_id": "scgd"
+  },
+  "desc": {
+    "CNT_USER_ACTIVE": "活跃用户数"
+  },
+  "std_paramter": {
+    "condition": {
+      "metric_id": "CNT_USER_ACTIVE",
+      "metric_lat_type": "date",
+      "time_granularity": "day",
+      "start_date": "2018-8-30",
+      "end_date": "2018-8-30"
+    },
+    "platform_id": "scgd",
+    "action": "get_user_metric_by_date"
+  }
+}
