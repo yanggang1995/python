@@ -1,19 +1,20 @@
 # -*- coding: UTF-8 -*-
 import pymysql
 import smtplib
+import time
 from email.mime.text import MIMEText
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
-from email.mime.image import MIMEImage
+from borax.calendars.lunardate import LunarDate
 
 # ------ Email Config ------
-EMAIL_SERVER = "smtp.exmail.qq.com"
+EMAIL_SERVER = "smtp.qq.com"
 EMAIL_SENDER = "1036556426@qq.com"
-EMAIL_PASS = ""
+EMAIL_PASS = "154_226_221_202_227_156_169_172_152_225_208_220_212_202_215_212_"
 EMAIL_RECEIVER = ["651464160@qq.com"]
 
 # ------ Mysql Config ------
-MYSQL_HOST = ""
+MYSQL_HOST = "mysql_cnt"
 MYSQL_USER = "root"
 MYSQL_PWD = "yg"
 MYSQL_DB = "yg_live"
@@ -115,44 +116,62 @@ def decrypt(p):
     return dec_str
 
 
-if __name__ == '__main__':
-    # 计算农历日期
-    print("")
+def fix_zero(num):
+    if num < 10:
+        return f"0{num}"
+    else:
+        return f"{num}"
+
+
+def main():
+    # 获取明天的农历日期（农历2018年七月初一）
+    lu_date = LunarDate.tomorrow()
+    tom_day = f"{fix_zero(lu_date.month)}{fix_zero(lu_date.day)}"
     # 查询数据
-    b_sql = "select "
+    b_sql = f"select modify_time,name,relation,lunar_birth from birth where lunar_birth='{tom_day}'"
     b_data = m_load_data(b_sql)
-    # 生成邮件
-    msg_root = MIMEMultipart('related')
-    msg_root['From'] = Header("Remind", 'utf-8')
-    msg_root['To'] = "Y.G"
-    subject = f'生日提醒-记得关注'
-    msg_root['Subject'] = Header(subject, 'utf-8')
-    msg_alternative = MIMEMultipart('alternative')
-    b_info = ""
-    for item in b_data:
-        b_info += "<tr>"
-        for var2 in range(0, 3):
-            b_info += f"<td>{item[var2]}</td>"
-        b_info += "</tr>"
-    mail_msg = f"""
-    {CSS_INFO}
-    <table class="pure-table pure-table-horizontal">
-        <thead>
-        <tr>
-            <th>-_-</th>
-            <th>Name</th>
-            <th>relation</th>
-            <th>birth</th>
-        </tr>
-        </thead>
-        <tbody>
-            {b_info}
-        </tbody>
-    </table>
-    <br/>
-    <hr size=1 color='gray' width='600' align='left'/>
-    """
-    msg_alternative.attach(MIMEText(mail_msg, 'html', 'utf-8'))
-    msg_root.attach(msg_alternative)
-    # 发送邮件
-    send_email(msg_root)
+    if len(b_data) > 0:
+        # 生成邮件
+        msg_root = MIMEMultipart('related')
+        msg_root['From'] = Header("Remind", 'utf-8')
+        msg_root['To'] = "Y.G"
+        subject = f'明日生日提醒-记得关注'
+        msg_root['Subject'] = Header(subject, 'utf-8')
+        msg_alternative = MIMEMultipart('alternative')
+        b_info = ""
+        for item in b_data:
+            b_info += "<tr>"
+            for var2 in range(0, 4):
+                b_info += f"<td>{item[var2]}</td>"
+            b_info += "</tr>"
+        mail_msg = f"""
+        {CSS_INFO}
+        <h2>这些小可爱明天要过生日了，记得送祝福哦！！！</h2>
+        <table class="pure-table pure-table-horizontal">
+            <thead>
+            <tr>
+                <th>-_-</th>
+                <th>Name</th>
+                <th>relation</th>
+                <th>birth</th>
+            </tr>
+            </thead>
+            <tbody>
+                {b_info}
+            </tbody>
+        </table>
+        <br/>
+        <hr size=1 color='gray' width='600' align='left'/>
+        """
+        msg_alternative.attach(MIMEText(mail_msg, 'html', 'utf-8'))
+        msg_root.attach(msg_alternative)
+        # 发送邮件
+        send_email(msg_root)
+    else:
+        print("明天没有过生日的人")
+
+
+if __name__ == '__main__':
+    while True:
+        main()
+        time.sleep(43200)

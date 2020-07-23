@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import sys
 
-FACTOR = 'fsdf^%jks234af&(kndjfd&^jnkjdfg%rgdfgsd&234n123'
+FACTOR = "3rner034&ioereor4^jknaer2%dfwpier_ipfepfn6723_irfwrp"
 
 
 def encrypt(s):
